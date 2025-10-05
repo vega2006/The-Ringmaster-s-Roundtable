@@ -6,7 +6,8 @@ export default function PlanInput() {
     city, setCity,
     origin, setOrigin,
     destination, setDestination,
-    travelDate, setTravelDate,
+    startTravelDate, setStartTravelDate,
+    endTravelDate, setEndTravelDate,
     generateTripPlan,
     isLoading, error
   } = useTrip();
@@ -14,14 +15,6 @@ export default function PlanInput() {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-sky-700">🧭 Create Your Trip Plan</h2>
-
-      <textarea
-        placeholder="Describe your trip... (e.g., 5-day trip to Paris with sightseeing and food tours)"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        className="w-full p-4 border rounded-lg resize-none focus:ring-2 focus:ring-sky-400"
-        rows="4"
-      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
@@ -31,12 +24,22 @@ export default function PlanInput() {
           onChange={(e) => setCity(e.target.value)}
           className="p-3 border rounded-lg focus:ring-2 focus:ring-sky-400"
         />
-        <input
-          type="date"
-          value={travelDate}
-          onChange={(e) => setTravelDate(e.target.value)}
-          className="p-3 border rounded-lg focus:ring-2 focus:ring-sky-400"
-        />
+        <div className="flex space-x-2">
+          <input
+            type="date"
+            value={startTravelDate}
+            onChange={(e) => setStartTravelDate(e.target.value)}
+            className="p-3 border rounded-lg focus:ring-2 focus:ring-sky-400"
+            placeholder="Start Date"
+          />
+          <input
+            type="date"
+            value={endTravelDate}
+            onChange={(e) => setEndTravelDate(e.target.value)}
+            className="p-3 border rounded-lg focus:ring-2 focus:ring-sky-400"
+            placeholder="End Date"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -3,13 +3,14 @@ const cors = require("cors");
 require("dotenv").config();
 const weatherRoutes = require("./routes/weatherRoutes.js");
 const mapsRoutes = require("./routes/mapsRoutes.js");
-
+const eventsRoutes = require("./routes/eventsRoutes.js")
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use("/api/weather", weatherRoutes);
 app.use("/api/maps", mapsRoutes);
+app.use("/api/events", eventsRoutes);
 
 const PORT = process.env.PORT || 4000;
 

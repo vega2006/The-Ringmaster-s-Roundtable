@@ -9,7 +9,20 @@ export const useTrip = () => {
   if (!context) throw new Error("useTrip must be used within a TripProvider");
   return context;
 };
+const calculateDuration = (start, end) => {
+  if (!start || !end) return 0;
 
+  const startDate = new Date(start + "T00:00:00Z");
+  const endDate = new Date(end + "T00:00:00Z");
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return 0;
+
+  const timeDifference = endDate.getTime() - startDate.getTime();
+
+  const dayDifference = Math.round(timeDifference / (1000 * 3600 * 24));
+
+  return Math.max(1, dayDifference + 1);
+};
 export const TripProvider = ({ children }) => {
   const [prompt, setPrompt] = useState("");
   const [tripPlan, setTripPlan] = useState(null);
@@ -19,11 +32,15 @@ export const TripProvider = ({ children }) => {
   const [city, setCity] = useState("");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
-  const [travelDate, setTravelDate] = useState("");
+  const [startTravelDate, setStartTravelDate] = useState("");
+  const [endTravelDate, setEndTravelDate] = useState("");
 
   const [activeTab, setActiveTab] = useState("Plan");
   const [manualWeather, setManualWeather] = useState(null);
   const [manualRoute, setManualRoute] = useState(null);
+
+  const [eventsCache, setEventsCache] = useState({});
+
 
   const isLLMPlanning = useMemo(() => prompt.trim().length > 0, [prompt]);
   const isManualLookup = useMemo(
@@ -34,7 +51,9 @@ export const TripProvider = ({ children }) => {
 
   const generateTripPlan = async () => {
     if (!isLLMPlanning && !isManualLookup) {
-      setError("Please enter a detailed prompt OR fill out the City/Route fields.");
+      setError(
+        "Please enter a detailed prompt OR fill out the City/Route fields."
+      );
       return;
     }
 
@@ -48,12 +67,15 @@ export const TripProvider = ({ children }) => {
       setActiveTab("Itinerary");
       let fullPrompt = prompt;
       if (city) fullPrompt += ` (Focus City: ${city})`;
-      if (origin && destination) fullPrompt += ` (Route: ${origin} to ${destination})`;
-      if (travelDate) fullPrompt += ` (Starting Date: ${travelDate})`;
+      if (origin && destination)
+        fullPrompt += ` (Route: ${origin} to ${destination})`;
+      if (startTravelDate) fullPrompt += ` (Starting Date: ${startTravelDate})`;
 
       const payload = {
         contents: [{ parts: [{ text: fullPrompt }] }],
-        systemInstruction: { parts: [{ text: "Generate a structured trip plan." }] },
+        systemInstruction: {
+          parts: [{ text: "Generate a structured trip plan." }],
+        },
         generationConfig: {
           responseMimeType: "application/json",
           responseSchema: RESPONSE_SCHEMA,
@@ -76,10 +98,23 @@ export const TripProvider = ({ children }) => {
       }
     } else {
       setActiveTab("Weather");
-      if (city && getWeather) setManualWeather(getWeather(city));
-      if (origin && destination && travelDate) setManualRoute(getRoute(origin, destination));
+      const tripDuration = calculateDuration(startTravelDate, endTravelDate);
+      setTripPlan({ ...tripPlan, duration_days: tripDuration });
+      if (city && startTravelDate) {
+        const weatherRes = await getWeather(city, startTravelDate);
+        setManualWeather(weatherRes.data);
+        console.log(weatherRes.data);
+      }
+      if (origin && destination && startTravelDate) {
+        const routeRes = await getRoute(origin, destination, startTravelDate);
+        setManualRoute({
+          ...routeRes.data,
+          origin,
+          destination,
+          transport: "Road",
+        });
+      }
     }
-
     setIsLoading(false);
   };
 
@@ -99,14 +134,18 @@ export const TripProvider = ({ children }) => {
         setOrigin,
         destination,
         setDestination,
-        travelDate,
-        setTravelDate,
+        startTravelDate,
+        setStartTravelDate,
+        endTravelDate,
+        setEndTravelDate,
         tripPlan,
         manualWeather,
         manualRoute,
         generateTripPlan,
         isLLMPlanning,
         isManualLookup,
+        eventsCache,
+        setEventsCache
       }}
     >
       {children}

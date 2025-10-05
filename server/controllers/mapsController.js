@@ -1,4 +1,3 @@
-// Example for mapsController.js
 const { fetchRoute } = require("../services/mapsAgent.js");
 const getRoute = async (req, res) => {
   const { origin, destination, travelDate } = req.query;
