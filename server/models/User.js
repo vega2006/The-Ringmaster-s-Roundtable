@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
         image: {
             type:String
         },
+        preferences: [{
+            type: String,
+            enum: ['Sports', 'Concerts', 'Movies', 'PoliticalEvents', 'ArtGallery', 'Museum', 'Theater', 'Workshops', 'TechEvents', 'FoodFest']
+        }]
 	},
 	{ timestamps: true }
 );
