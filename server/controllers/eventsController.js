@@ -10,7 +10,7 @@ const getEvents = async (req, res) => {
   try {
     const data = await fetchEvents(city, startDate, endDate);
     res.json(data);
-    console.log(data);
+    // console.log(data);
     
   } catch (err) {
     console.error("Events fetch error:", err);

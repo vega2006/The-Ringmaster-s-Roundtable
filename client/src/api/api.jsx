@@ -21,3 +21,18 @@ export const getEvents = (destination, startTravelDate, endTravelDate) =>
       endDate: endTravelDate,
     },
   });
+
+export const getTripBudget = async (payload) => {
+  // console.log(payload);
+  return axios.post(`${API_BASE}/budget`, payload);
+};
+
+
+export const getItinerary = async (destination,    startDate, endDate) => {
+  return axios.post(`${API_BASE}/itinerary/generate`, {
+      destination,
+      startDate,
+      endDate,
+    });
+};
+

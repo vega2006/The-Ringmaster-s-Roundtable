@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useMemo } from "react";
-import { getWeather, getRoute } from "../api/api";
+import { getWeather, getRoute, getTripBudget } from "../api/api";
 import { API_URL, RESPONSE_SCHEMA } from "../utils/constants";
 
 const TripContext = createContext(null);
@@ -40,7 +40,8 @@ export const TripProvider = ({ children }) => {
   const [manualRoute, setManualRoute] = useState(null);
 
   const [eventsCache, setEventsCache] = useState({});
-
+  const [budgetEstimate, setBudgetEstimate] = useState(null);
+  const [numPeople, setNumPeople] = useState(1);  
 
   const isLLMPlanning = useMemo(() => prompt.trim().length > 0, [prompt]);
   const isManualLookup = useMemo(
@@ -64,38 +65,38 @@ export const TripProvider = ({ children }) => {
     setManualRoute(null);
 
     if (isLLMPlanning) {
-      setActiveTab("Itinerary");
-      let fullPrompt = prompt;
-      if (city) fullPrompt += ` (Focus City: ${city})`;
-      if (origin && destination)
-        fullPrompt += ` (Route: ${origin} to ${destination})`;
-      if (startTravelDate) fullPrompt += ` (Starting Date: ${startTravelDate})`;
+      // setActiveTab("Itinerary");
+      // let fullPrompt = prompt;
+      // if (city) fullPrompt += ` (Focus City: ${city})`;
+      // if (origin && destination)
+      //   fullPrompt += ` (Route: ${origin} to ${destination})`;
+      // if (startTravelDate) fullPrompt += ` (Starting Date: ${startTravelDate})`;
 
-      const payload = {
-        contents: [{ parts: [{ text: fullPrompt }] }],
-        systemInstruction: {
-          parts: [{ text: "Generate a structured trip plan." }],
-        },
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: RESPONSE_SCHEMA,
-        },
-        tools: [{ google_search: {} }],
-      };
+      // const payload = {
+      //   contents: [{ parts: [{ text: fullPrompt }] }],
+      //   systemInstruction: {
+      //     parts: [{ text: "Generate a structured trip plan." }],
+      //   },
+      //   generationConfig: {
+      //     responseMimeType: "application/json",
+      //     responseSchema: RESPONSE_SCHEMA,
+      //   },
+      //   tools: [{ google_search: {} }],
+      // };
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+      // try {
+      //   const res = await fetch(API_URL, {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(payload),
+      //   });
 
-        const result = await res.json();
-        const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-        setTripPlan(jsonText ? JSON.parse(jsonText) : null);
-      } catch (err) {
-        setError(`Failed to process the plan: ${err.message}`);
-      }
+      //   const result = await res.json();
+      //   const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+      //   setTripPlan(jsonText ? JSON.parse(jsonText) : null);
+      // } catch (err) {
+      //   setError(`Failed to process the plan: ${err.message}`);
+      // }
     } else {
       setActiveTab("Weather");
       const tripDuration = calculateDuration(startTravelDate, endTravelDate);
@@ -103,7 +104,7 @@ export const TripProvider = ({ children }) => {
       if (city && startTravelDate) {
         const weatherRes = await getWeather(city, startTravelDate);
         setManualWeather(weatherRes.data);
-        console.log(weatherRes.data);
+        // console.log(weatherRes.data);
       }
       if (origin && destination && startTravelDate) {
         const routeRes = await getRoute(origin, destination, startTravelDate);
@@ -114,6 +115,32 @@ export const TripProvider = ({ children }) => {
           transport: "Road",
         });
       }
+      if (origin && destination && startTravelDate && endTravelDate) {
+            try {
+                const tripData = {
+                    origin,
+                    destination,
+                    startTravelDate,
+                    endTravelDate,
+                   
+                    numPeople: numPeople, 
+                };
+                
+               
+                const budgetRes = await getTripBudget(tripData);
+                // console.log(budgetRes.data);
+                
+                
+                setBudgetEstimate(budgetRes.data); 
+                // console.log(budgetEstimate);
+                
+                setActiveTab("Budget"); 
+
+            } catch (err) {
+                console.error("Budget estimation failed:", err);
+                setError("Failed to calculate budget. Please check server connection.");
+            }
+        }
     }
     setIsLoading(false);
   };
@@ -145,7 +172,11 @@ export const TripProvider = ({ children }) => {
         isLLMPlanning,
         isManualLookup,
         eventsCache,
-        setEventsCache
+        setEventsCache,
+        numPeople,
+        setNumPeople,
+        budgetEstimate,
+        setBudgetEstimate
       }}
     >
       {children}

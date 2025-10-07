@@ -21,7 +21,7 @@ const fetchEvents = async (city, startDate, endDate) => {
     });
 
     const events = response.data._embedded?.events || [];
-    console.log((response.data));
+    // console.log((response.data));
     
     return events.map(event => ({
       name: event.name,

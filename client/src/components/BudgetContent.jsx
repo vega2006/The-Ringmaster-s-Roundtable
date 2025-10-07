@@ -1,7 +1,87 @@
+// BudgetContent.jsx
+
+import React from 'react';
+import { useTrip } from '../contexts/TripContext'; // Adjust path if necessary
+
 export default function BudgetContent() {
-  return (
-    <div className="text-gray-500 italic text-center py-10">
-      💰 Budget planner coming soon...
-    </div>
-  );
+    const { budgetEstimate, isManualLookup, isLoading, error } = useTrip();
+  // console.log("💡 budgetEstimate from context:", budgetEstimate);
+
+    if (error) {
+        return (
+            <div className="p-6 bg-red-50 border border-red-200 text-red-700 rounded-lg max-w-lg mx-auto my-8">
+                ❌ Error: Failed to load budget. {error}
+            </div>
+        );
+    }
+
+    if (isLoading && isManualLookup) {
+        return (
+            <div className="flex items-center justify-center p-10 max-w-lg mx-auto my-8 bg-blue-50 text-blue-700 rounded-lg shadow-md">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span className="font-semibold">Calculating Budget...</span>
+            </div>
+        );
+    }
+    
+    if (!budgetEstimate) {
+        return (
+            <div className="text-gray-500 italic text-center p-10 max-w-lg mx-auto my-8 bg-gray-50 rounded-lg border border-gray-200">
+                💰 Budget planner: Enter your Origin, Destination, and Dates to get a trip cost estimate.
+            </div>
+        );
+    }
+
+    // Deconstruct fields from the budget estimate
+    const { total, breakdown, duration_days, duration_nights } = budgetEstimate;
+    
+    // Safely determine the number of people (assuming it was passed back in the estimate object,
+    // otherwise defaulting to 2, which is the implicit number used in the per-person backend logic).
+    const estimatedPeople = budgetEstimate.numPeople || 2;
+
+
+    return (
+        <div className="p-6 max-w-xl mx-auto my-8 bg-white border border-gray-200 rounded-xl shadow-2xl">
+            <header className="mb-6 border-b pb-4">
+                <h2 className="text-3xl font-extrabold text-green-600">
+                    Estimated Trip Budget
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                    Estimate for **{duration_days} days** ({duration_nights} nights) and **{estimatedPeople} people**. 
+                </p>
+            </header>
+            
+            <div className="space-y-3">
+                {Object.entries(breakdown)
+                    .filter(([key]) => key !== 'travel_type') 
+                    .map(([key, value]) => (
+                        <div key={key} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
+                            <span className="flex items-center text-gray-700 font-medium">
+                                {key === 'travel' && <span className="mr-2">✈️</span>}
+                                {key === 'accommodation' && <span className="mr-2">🏨</span>}
+                                {key === 'food' && <span className="mr-2">🍽️</span>}
+                                {key === 'activities' && <span className="mr-2">🎟️</span>}
+                                {key === 'miscellaneous' && <span className="mr-2">🛍️</span>}
+                                {key.replace('_', ' ').charAt(0).toUpperCase() + key.replace('_', ' ').slice(1)}
+                            </span>
+                            <span className="font-semibold text-lg text-gray-800">${value.toFixed(2)}</span>
+                        </div>
+                    ))}
+            </div>
+
+            <div className="flex justify-between items-center mt-8 p-4 bg-green-50 rounded-lg border-2 border-green-200">
+                <span className="text-xl font-bold text-green-800">TOTAL ESTIMATE</span>
+                <span className="text-3xl font-extrabold text-green-800">${total.toFixed(2)}</span>
+            </div>
+            
+            <footer className="mt-5 pt-3 border-t border-gray-100">
+                <p className="text-xs text-gray-500 italic">
+                    *Travel mode: **{breakdown.travel_type}**. All non-travel costs (Accommodation, Food, Activities) are based on cost-of-living data for your destination city.
+                </p>
+            </footer>
+        </div>
+    );
 }

@@ -9,7 +9,8 @@ export default function PlanInput() {
     startTravelDate, setStartTravelDate,
     endTravelDate, setEndTravelDate,
     generateTripPlan,
-    isLoading, error
+    isLoading, error,
+    numPeople, setNumPeople   // <-- import from context
   } = useTrip();
 
   return (
@@ -42,7 +43,7 @@ export default function PlanInput() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <input
           type="text"
           placeholder="Origin"
@@ -56,6 +57,14 @@ export default function PlanInput() {
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
           className="p-3 border rounded-lg focus:ring-2 focus:ring-sky-400"
+        />
+        <input
+          type="number"
+          min="1"
+          value={numPeople}
+          onChange={(e) => setNumPeople(e.target.value)}
+          className="p-3 border rounded-lg focus:ring-2 focus:ring-sky-400"
+          placeholder="Number of People"
         />
       </div>
 
