@@ -3,6 +3,12 @@ import axios from "axios";
 const API_BASE = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 
+const api = axios.create({
+    baseURL: "http://localhost:4000/auth/",
+    // withCredentials: true,
+});
+
+export const googleAuth = (code) => api.get(`/google?code=${code}`);
 
 
 export const getWeather = (city, travelDate) => 

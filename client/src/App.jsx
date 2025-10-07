@@ -605,24 +605,45 @@
 // export default App;
 
 
-import AppHeader from "./components/AppHeader";
-import Sidebar from "./components/Sidebar";
-import MainContent from "./components/MainContent";
-import ContentRouter from "./components/ContentRouter";
-import { TripProvider } from "./contexts/TripContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLogin from "./components/GoogleLogin";
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import RefreshHandler from './components/RefreshHandler';
+import NotFound from './components/NotFound';
+import Dashboard from "./pages/Dashboard"; 
+import Home from "./pages/Home";
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // This wrapper is fine as is
+  const GoogleWrapper = () => (
+    <GoogleOAuthProvider clientId="1054190178825-cc3eg87b9uvh9hfn384ge5sqe5hq9l5v.apps.googleusercontent.com">
+      <GoogleLogin />
+    </GoogleOAuthProvider>
+  );
+
+  const PrivateRoute = ({ element }) => {
+    return isAuthenticated ? element : <Navigate to="/login" />;
+  };
+
   return (
-    <TripProvider>
-      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-white to-amber-100 font-inter">
-        <AppHeader />
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[240px_1fr] bg-white shadow-2xl rounded-2xl overflow-hidden mt-4 mb-8">
-          <Sidebar />
-          <MainContent>
-            <ContentRouter />
-          </MainContent>
-        </div>
-      </div>
-    </TripProvider>
+    <BrowserRouter>
+      <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
+      <Routes>
+        {/* Public route for the Home page, where users can sign in */}
+        <Route path="/" element={<Home isAuthenticated={isAuthenticated} />} />
+
+        {/* This is the login page. Redirect to home after login. */}
+        <Route path="/login" element={<GoogleWrapper />} />
+
+        {/* This is the protected dashboard route */}
+        <Route path='/dashboard' element={<PrivateRoute element={<Dashboard />} />} />
+
+        {/* Catch-all route for invalid URLs */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
