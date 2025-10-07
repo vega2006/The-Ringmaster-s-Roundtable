@@ -1,4 +1,4 @@
-// Home.jsx
+
 import { Link, useNavigate } from "react-router-dom";
 
 const Home = ({ isAuthenticated }) => {
@@ -19,10 +19,7 @@ const Home = ({ isAuthenticated }) => {
       </h1>
       <p className="text-xl text-gray-600 mb-8">Your Personal AI-powered Adventure Planner</p>
       <div className="flex gap-4">
-        {/*
-          The Sign In and Sign Up buttons redirect to the login page.
-          The GoogleLogin component should handle the redirection back to the home page.
-        */}
+       
         <Link to="/login" className="px-6 py-3 bg-emerald-500 text-white font-bold rounded-lg shadow-md hover:bg-emerald-600 transition-colors">
           Sign In
         </Link>

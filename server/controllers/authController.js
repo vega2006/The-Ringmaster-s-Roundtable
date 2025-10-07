@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { oauth2Client } = require('../utils/googleClient');
 
-/* GET Google Authentication API. */
+
 exports.googleAuth = async (req, res, next) => {
     const code = req.query.code;
     try {
@@ -14,8 +14,7 @@ exports.googleAuth = async (req, res, next) => {
         );
         const { email, name, picture } = userRes.data;
 
-        // Find or create the user document in the database
-        // This prevents the duplicate key error
+       
         let user = await User.findOne({ email });
 
         if (!user) {
@@ -26,7 +25,7 @@ exports.googleAuth = async (req, res, next) => {
             });
         }
         
-        // This is a crucial line to ensure the ID is correctly extracted after a user is found or created
+      
         const { _id } = user;
         const token = jwt.sign({ _id, email },
             process.env.JWT_SECRET, {

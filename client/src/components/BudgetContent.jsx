@@ -1,7 +1,7 @@
-// BudgetContent.jsx
+
 
 import React from 'react';
-import { useTrip } from '../contexts/TripContext'; // Adjust path if necessary
+import { useTrip } from '../contexts/TripContext'; 
 
 export default function BudgetContent() {
     const { budgetEstimate, isManualLookup, isLoading, error } = useTrip();
@@ -35,11 +35,8 @@ export default function BudgetContent() {
         );
     }
 
-    // Deconstruct fields from the budget estimate
     const { total, breakdown, duration_days, duration_nights } = budgetEstimate;
-    
-    // Safely determine the number of people (assuming it was passed back in the estimate object,
-    // otherwise defaulting to 2, which is the implicit number used in the per-person backend logic).
+
     const estimatedPeople = budgetEstimate.numPeople || 2;
 
 

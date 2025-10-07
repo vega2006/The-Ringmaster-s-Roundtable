@@ -10,7 +10,7 @@ export default function PlanInput() {
     endTravelDate, setEndTravelDate,
     generateTripPlan,
     isLoading, error,
-    numPeople, setNumPeople   // <-- import from context
+    numPeople, setNumPeople  
   } = useTrip();
 
   return (

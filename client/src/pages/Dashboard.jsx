@@ -1,8 +1,3 @@
-// import AppHeader from "./components/AppHeader";
-// import Sidebar from "./components/Sidebar";
-// import MainContent from "./components/MainContent";
-// import ContentRouter from "./components/ContentRouter";
-// import { TripProvider } from "./contexts/TripContext";
 
 import {TripProvider } from "../contexts/TripContext";
 import AppHeader from "../components/AppHeader";
@@ -34,7 +29,7 @@ const Dashboard = () => {
       <div className="sticky top-0 z-10 bg-white shadow-lg p-3 sm:p-4 border-b-4 border-amber-600/70">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                     
-                    {/* User Info Display */}
+                   
                     <div className="flex items-center space-x-4">
                         <img 
                             className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-amber-500" 
@@ -51,7 +46,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Logout Button (Stylized and positioned on the right) */}
+              
                     <button 
                         onClick={handleLogout}
                         className="px-4 py-2 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 
@@ -79,36 +74,3 @@ const Dashboard = () => {
   )
 }
 export default Dashboard
-
-
-// import React, { useEffect, useState } from 'react'
-// import { useNavigate } from 'react-router-dom';
-
-// const Dashboard = () => {
-    // const [userInfo, setUserInfo] = useState(null);
-    // const navigate = useNavigate();
-
-    // useEffect(()=>{
-    //     const data = localStorage.getItem('user-info');
-    //     const userData = JSON.parse(data);
-    //     setUserInfo(userData);
-    // },[])
-
-    // const handleLogout = ()=>{
-    //     localStorage.removeItem('user-info');
-    //     navigate('/login');
-    // }
-
-//     return (
-//         <>
-            // <h1>Welcome {userInfo?.name}</h1>
-            // <h3>{userInfo?.email}</h3>
-            // <img src={userInfo?.image} alt={userInfo?.name}/>
-            // <button onClick={handleLogout}
-            // >Logout
-            // </button>
-//         </>
-//     )
-// }
-
-// export default Dashboard

@@ -1,4 +1,3 @@
-// budgetAgent.js
 
 const axios = require("axios");
 
@@ -30,7 +29,7 @@ async function getDistance(origin, destination) {
     return distanceMeters / 1000; 
   } catch (e) {
     console.error("Error fetching distance:", e.message);
-    return 500; // fallback distance
+    return 500; 
   }
 }
 
@@ -48,7 +47,7 @@ async function getCityCostData(destinationCity) {
   try {
     console.log(`🌍 Attempting to fetch Teleport data for: ${formattedSlug}`);
     
-    // 2. Try Teleport API
+
     const resp = await axios.get(
       `https://api.teleport.org/api/urban_areas/slug:${formattedSlug}/details/`,
       { timeout: 15000 }
@@ -60,7 +59,7 @@ async function getCityCostData(destinationCity) {
     let avg_hotel_nightly_pp = 100;
     let daily_activities_pp = 40;
 
-    // 🥗 Extract approximate daily food cost
+   
     const foodCat = categories.find(c => c.id === "COST-OF-LIVING");
     if (foodCat) {
       const mealData = foodCat.data.find(d => d.label.includes("Meal") || d.label.includes("Lunch"));
@@ -69,7 +68,7 @@ async function getCityCostData(destinationCity) {
       }
     }
 
-    // 🏨 Estimate accommodation cost
+   
     const rentCat = categories.find(c => c.id === "HOUSING");
     if (rentCat) {
       const hotelData = rentCat.data.find(d => d.label.includes("1 bedroom apartment") || d.label.includes("Studio"));
@@ -78,27 +77,27 @@ async function getCityCostData(destinationCity) {
       }
     }
 
-    // 🎟️ Approx daily activities cost
+   
     daily_activities_pp = daily_food_pp * 0.6;
     
     console.log(`✅ Teleport API success for ${cityKey}:`, { daily_food_pp, avg_hotel_nightly_pp, daily_activities_pp });
     return { daily_food_pp, avg_hotel_nightly_pp, daily_activities_pp };
 
   } catch (e) {
-    // 3. FALLBACK: If Teleport fails, return static data
+ 
     console.warn(`⚠️ Teleport API failed for ${cityKey}: ${e.message}`);
     console.log(`📊 Using static fallback data:`, localFallback);
     return localFallback;
   }
 }
 
-// --- Main Budget Calculation ---
+
 const fetchBudget = async (tripDetails) => {
-  // console.log("🚀 fetchBudget called with:", tripDetails);
+  
   
   const { origin, destination, startTravelDate, endTravelDate, numPeople } = tripDetails;
 
-  // Calculate duration
+
   const people = parseInt(numPeople) || 1;
   const startDate = new Date(startTravelDate);
   const endDate = new Date(endTravelDate);
@@ -110,7 +109,6 @@ const fetchBudget = async (tripDetails) => {
   const breakdown = {};
   let totalBudget = 0;
 
-  // 1. Travel Cost
   console.log("🚗 Calculating travel cost...");
   const distanceKm = await getDistance(origin, destination) * 2; // Round trip
 
@@ -125,28 +123,27 @@ const fetchBudget = async (tripDetails) => {
 
   console.log(`✈️ Travel cost: $${breakdown.travel.toFixed(2)} (${breakdown.travel_type})`);
 
-  // 2. Get City Cost Data
+
   console.log("🏙️ Fetching city cost data...");
   const cityCosts = await getCityCostData(destination);
   console.log("🌆 City costs received:", cityCosts);
 
-  // 3. Accommodation
+ 
   breakdown.accommodation = cityCosts.avg_hotel_nightly_pp * durationNights * people;
   console.log(`🏨 Accommodation: $${breakdown.accommodation.toFixed(2)}`);
 
-  // 4. Food
+
   breakdown.food = cityCosts.daily_food_pp * durationDays * people;
   console.log(`🍽️ Food: $${breakdown.food.toFixed(2)}`);
 
-  // 5. Activities
+ 
   breakdown.activities = cityCosts.daily_activities_pp * durationDays * people;
   console.log(`🎭 Activities: $${breakdown.activities.toFixed(2)}`);
 
-  // 6. Miscellaneous
+
   breakdown.miscellaneous = DEFAULT_MISC_PER_DAY_PP * durationDays * people;
   console.log(`💼 Miscellaneous: $${breakdown.miscellaneous.toFixed(2)}`);
 
-  // Calculate total
   totalBudget = Object.values(breakdown)
     .filter(v => typeof v === 'number')
     .reduce((sum, val) => sum + val, 0);

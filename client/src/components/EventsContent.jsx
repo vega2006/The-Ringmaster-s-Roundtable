@@ -16,7 +16,7 @@ export default function EventsContent() {
   useEffect(() => {
     if (!currentKey) return;
 
-    // ✅ If cache already has events, use it directly and skip fetch
+   
     if (eventsCache[currentKey]) {
       console.log("✅ Using cached events");
       setEvents(eventsCache[currentKey]);
@@ -32,7 +32,6 @@ export default function EventsContent() {
         const fetched = response.data?.length ? response.data : [];
         setEvents(fetched);
 
-        // ✅ Save to global cache so future mounts use it
         setEventsCache((prev) => ({ ...prev, [currentKey]: fetched }));
       } catch (err) {
         console.error("❌ Error fetching events:", err);

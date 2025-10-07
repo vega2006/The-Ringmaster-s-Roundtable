@@ -1,4 +1,4 @@
-// src/components/Itinerary.jsx
+
 import React, { useState } from "react";
 import axios from "axios";
 import { useTrip } from "../contexts/TripContext";

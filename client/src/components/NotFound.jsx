@@ -7,7 +7,7 @@ function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-900 text-white font-inter text-center">
         
-        {/* The 404 Display (Themed) */}
+   
         <div className="space-y-4">
             <p className="text-8xl sm:text-9xl font-extrabold text-amber-500 tracking-wider animate-pulse">
                 404
@@ -20,7 +20,7 @@ function NotFound() {
             </p>
         </div>
 
-        {/* Action Button */}
+       
         <button 
             onClick={() => navigate('/')}
             className="mt-10 px-8 py-3 bg-amber-600 text-gray-900 font-bold rounded-full shadow-lg hover:bg-amber-500 

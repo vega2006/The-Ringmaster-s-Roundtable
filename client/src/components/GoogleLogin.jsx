@@ -58,10 +58,10 @@ const GoolgeLogin = (props) => {
 	return (
 		 <div className="min-h-screen flex items-center justify-center p-4 bg-gray-900 text-white font-inter">
             
-            {/* Login Card: Center stage */}
+           
             <div className="w-full max-w-lg p-8 space-y-8 bg-gray-800 rounded-xl shadow-2xl border-4 border-amber-600/50 transform transition duration-500 hover:shadow-amber-500/30">
                 
-                {/* Title Section */}
+          
                 <div className="text-center space-y-2">
                     <RingIcon className="mx-auto w-16 h-16 text-amber-500 animate-pulse-slow" />
                     <h1 className="text-5xl font-extrabold tracking-tight text-amber-500 uppercase font-serif">
@@ -75,18 +75,18 @@ const GoolgeLogin = (props) => {
                     </p>
                 </div>
 
-                {/* Action Section */}
+        
                 <div className="pt-6">
                     <button 
                         onClick={googleLogin}
-                        // Stylized button with depth and amber accent
+                        
                         className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-bold text-gray-900 
                                    bg-amber-500 hover:bg-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 
                                    transition duration-300 transform active:scale-95 ease-in-out uppercase 
                                    hover:shadow-xl hover:shadow-amber-500/40"
                         aria-label="Sign in with Google"
                     >
-                        {/* Google Icon Placeholder - using a generic star for theme */}
+              
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
                             viewBox="0 0 24 24" 
@@ -99,7 +99,7 @@ const GoolgeLogin = (props) => {
                     </button>
                 </div>
 
-                {/* Footer Text */}
+        
                 <p className="text-center text-sm text-gray-500 pt-4">
                     <span className="text-amber-600 font-semibold">Security first.</span> No lions, tigers, or bears. Just safe sign-in.
                 </p>
