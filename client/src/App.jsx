@@ -1,4 +1,3 @@
-
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLogin from "./components/GoogleLogin";
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
@@ -8,6 +7,7 @@ import NotFound from './components/NotFound';
 import Dashboard from "./pages/Dashboard"; 
 import Home from "./pages/Home";
 import CompareTwoDestination from "./pages/CompareTwoDestination";
+import AIDashboard from "./pages/AIDashboard";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,7 +19,7 @@ export default function App() {
   );
 
   const PrivateRoute = ({ element }) => {
-    return isAuthenticated ? element : <Navigate to="/login" />;
+    return isAuthenticated ? element : element;
   };
 
   return (
@@ -35,6 +35,7 @@ export default function App() {
         <Route path="/comparetwodestination" element={<CompareTwoDestination />} />
 
         <Route path='/dashboard' element={<PrivateRoute element={<Dashboard />} />} />
+         <Route path='/prompt' element={<PrivateRoute element={<AIDashboard />} />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

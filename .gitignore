@@ -1,5 +1,8 @@
 # Root .gitignore
 
+# history
+.history
+
 # Node modules
 node_modules/
 client/node_modules/
@@ -20,3 +23,8 @@ server/build/
 # OS / Editor files
 .DS_Store
 .vscode/
+
+# Ignore package-lock files
+package-lock.json
+client/package-lock.json
+server/package-lock.json

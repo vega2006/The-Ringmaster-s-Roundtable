@@ -4,7 +4,7 @@ const TICKETMASTER_API_URL = "https://app.ticketmaster.com/discovery/v2/events.j
 
 const fetchEvents = async (city, startDate, endDate) => {
   const API_KEY = process.env.TICKETMASTER_API_KEY;
-
+ console.log(city +" "+startDate+" "+endDate);
   const startDateTime = `${startDate}T00:00:00Z`;
   const endDateTime = endDate ? `${endDate}T23:59:59Z` : `${startDate}T23:59:59Z`;
 

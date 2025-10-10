@@ -127,6 +127,7 @@ const ProfileModal = ({ userInfo, isModalOpen, closeModal, onSave }) => {
     );
 };
 
+
 const Dashboard = () => {
 
     const [userInfo, setUserInfo] = useState(null);
@@ -235,7 +236,9 @@ const Dashboard = () => {
           <AppHeader />
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[240px_1fr] bg-white shadow-2xl rounded-2xl overflow-hidden mt-4 mb-8">
             <Sidebar />
+            
             <MainContent>
+              
               <ContentRouter />
             </MainContent>
           </div>

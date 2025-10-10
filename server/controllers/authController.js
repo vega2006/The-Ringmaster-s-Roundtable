@@ -36,6 +36,7 @@ exports.googleAuth = async (req, res, next) => {
             message: 'success',
             token,
             user,
+            _id
         });
     } catch (err) {
         console.error("Google auth error:", err);

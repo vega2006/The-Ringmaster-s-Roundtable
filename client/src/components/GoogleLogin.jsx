@@ -12,7 +12,8 @@ const GoolgeLogin = (props) => {
 				const result = await googleAuth(authResult.code);
 				const {email, name, image} = result.data.user;
 				const token = result.data.token;
-				const obj = {email,name, token, image};
+                const userId=result.data._id;
+				const obj = {email,name, token, image,userId};
 				localStorage.setItem('user-info',JSON.stringify(obj));
 				navigate('/dashboard');
 			} else {

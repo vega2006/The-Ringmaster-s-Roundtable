@@ -24,11 +24,14 @@ const calculateDuration = (start, end) => {
   return Math.max(1, dayDifference + 1);
 };
 export const TripProvider = ({ children }) => {
+  const [itinerary,setItinerary]=useState([]);
+  const [events,setEvents]=useState([]);
+  const [AIResult,setAIResult]=useState("");
   const [prompt, setPrompt] = useState("");
   const [tripPlan, setTripPlan] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const [tabId,setTabId]=useState(null);
   const [city, setCity] = useState("");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -37,7 +40,7 @@ export const TripProvider = ({ children }) => {
 
   const [activeTab, setActiveTab] = useState("Plan");
   const [manualWeather, setManualWeather] = useState(null);
-  const [manualRoute, setManualRoute] = useState(null);
+  const [manualRoute, setManualRoute] = useState([]);
 
   const [eventsCache, setEventsCache] = useState({});
   const [budgetEstimate, setBudgetEstimate] = useState(null);
@@ -108,11 +111,10 @@ export const TripProvider = ({ children }) => {
       }
       if (origin && destination && startTravelDate) {
         const routeRes = await getRoute(origin, destination, startTravelDate);
-        setManualRoute({
-          ...routeRes.data,
+        setManualRoute({ 
           origin,
           destination,
-          transport: "Road",
+          routes:routeRes.data,
         });
       }
       if (origin && destination && startTravelDate && endTravelDate) {
@@ -167,7 +169,9 @@ export const TripProvider = ({ children }) => {
         setEndTravelDate,
         tripPlan,
         manualWeather,
+        setManualWeather,
         manualRoute,
+        setManualRoute,
         generateTripPlan,
         isLLMPlanning,
         isManualLookup,
@@ -176,7 +180,15 @@ export const TripProvider = ({ children }) => {
         numPeople,
         setNumPeople,
         budgetEstimate,
-        setBudgetEstimate
+        setBudgetEstimate,
+        events,
+        setEvents,
+        itinerary,
+        setItinerary,
+        AIResult,
+        setAIResult,
+        tabId,
+        setTabId
       }}
     >
       {children}

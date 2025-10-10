@@ -58,8 +58,6 @@ async function getCityCostData(destinationCity) {
     let daily_food_pp = 60;
     let avg_hotel_nightly_pp = 100;
     let daily_activities_pp = 40;
-
-   
     const foodCat = categories.find(c => c.id === "COST-OF-LIVING");
     if (foodCat) {
       const mealData = foodCat.data.find(d => d.label.includes("Meal") || d.label.includes("Lunch"));
@@ -67,8 +65,6 @@ async function getCityCostData(destinationCity) {
         daily_food_pp = mealData.currency_dollar_value * 2.5;
       }
     }
-
-   
     const rentCat = categories.find(c => c.id === "HOUSING");
     if (rentCat) {
       const hotelData = rentCat.data.find(d => d.label.includes("1 bedroom apartment") || d.label.includes("Studio"));

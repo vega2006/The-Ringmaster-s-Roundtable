@@ -34,7 +34,7 @@ export const getTripBudget = async (payload) => {
 };
 
 
-export const getItinerary = async (destination,    startDate, endDate) => {
+export const getItinerary = async (destination,startDate, endDate) => {
   return axios.post(`${API_BASE}/itinerary/generate`, {
       destination,
       startDate,

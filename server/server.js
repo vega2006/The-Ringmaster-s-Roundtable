@@ -9,9 +9,9 @@ const itineraryRoutes = require("./routes/itineraryRoutes.js")
 const authRoutes = require("./routes/authRoutes.js");
 const database = require("./config/database.js");
 const userRoutes = require("./routes/userRoutes.js");
-
 const compareRoutes = require("./routes/compareRoutes");
-
+const tabRoute=require("./routes/tabRoute.js");
+const mcpRoutes=require("./routes/mcpRoutes.js");
 
 database.connect();
 
@@ -30,6 +30,10 @@ app.use("/api/user", userRoutes);
 app.use('/auth/', authRoutes); 
 
 app.use("/api", compareRoutes);
+
+
+app.use("/api/mcp-server",mcpRoutes);
+app.use('/api/tabs',tabRoute);
 
 const PORT = process.env.PORT || 4000;
 
