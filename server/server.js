@@ -8,6 +8,10 @@ const budgetRoutes = require("./routes/budgetRoutes.js");
 const itineraryRoutes = require("./routes/itineraryRoutes.js")
 const authRoutes = require("./routes/authRoutes.js");
 const database = require("./config/database.js");
+const userRoutes = require("./routes/userRoutes.js");
+
+const compareRoutes = require("./routes/compareRoutes");
+
 
 database.connect();
 
@@ -21,7 +25,11 @@ app.use("/api/events", eventsRoutes);
 app.use("/api/budget", budgetRoutes);
 app.use("/api/itinerary", itineraryRoutes);
 
+app.use("/api/user", userRoutes);
+
 app.use('/auth/', authRoutes); 
+
+app.use("/api", compareRoutes);
 
 const PORT = process.env.PORT || 4000;
 

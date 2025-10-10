@@ -7,6 +7,7 @@ import RefreshHandler from './components/RefreshHandler';
 import NotFound from './components/NotFound';
 import Dashboard from "./pages/Dashboard"; 
 import Home from "./pages/Home";
+import CompareTwoDestination from "./pages/CompareTwoDestination";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,6 +31,8 @@ export default function App() {
 
      
         <Route path="/login" element={<GoogleWrapper />} />
+
+        <Route path="/comparetwodestination" element={<CompareTwoDestination />} />
 
         <Route path='/dashboard' element={<PrivateRoute element={<Dashboard />} />} />
 

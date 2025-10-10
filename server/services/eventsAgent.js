@@ -37,3 +37,44 @@ const fetchEvents = async (city, startDate, endDate) => {
 };
 
 module.exports = { fetchEvents };
+
+// const axios = require("axios");
+
+// const TICKETMASTER_API_URL = "https://app.ticketmaster.com/discovery/v2/events.json";
+
+// const fetchEvents = async (city, startDate, endDate, countryCode = null) => {
+//   const API_KEY = process.env.TICKETMASTER_API_KEY;
+//   if (!city || !startDate) throw new Error("City and startDate are required");
+
+//   const startDateTime = new Date(startDate).toISOString();
+//   const endDateTime = endDate ? new Date(endDate).toISOString() : new Date(startDate).toISOString();
+
+//   try {
+//     const params = {
+//       apikey: API_KEY,
+//       city,
+//       startDateTime,
+//       endDateTime,
+//       size: 6,
+//     };
+
+//     if (countryCode) params.countryCode = countryCode;
+
+//     const response = await axios.get(TICKETMASTER_API_URL, { params });
+
+//     const events = response.data._embedded?.events || [];
+
+//     return events.map(event => ({
+//       name: event.name,
+//       date: event.dates.start.localDate,
+//       time: event.dates.start.localTime || "N/A",
+//       venue: event._embedded?.venues?.[0]?.name || "TBD",
+//       url: event.url,
+//     }));
+//   } catch (error) {
+//     console.error("Ticketmaster API call failed:", error.response?.data || error.message);
+//     throw new Error("Failed to fetch events. Please check your parameters.");
+//   }
+// };
+
+// module.exports = { fetchEvents };
