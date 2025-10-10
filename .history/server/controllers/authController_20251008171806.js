@@ -1,0 +1,47 @@
+const axios = require('axios');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const { oauth2Client } = require('../utils/googleClient');
+
+/* GET Google Authentication API. */
+exports.googleAuth = async (req, res, next) => {
+    const code = req.query.code;
+    try {
+        const googleRes = await oauth2Client.getToken(code);
+        oauth2Client.setCredentials(googleRes.tokens);
+        const userRes = await axios.get(
+            `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+        );
+        const { email, name, picture } = userRes.data;
+
+        // Find or create the user document in the database
+        // This prevents the duplicate key error
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            user = await User.create({
+                name,
+                email,
+                image: picture,
+            });
+        }
+        
+        // This is a crucial line to ensure the ID is correctly extracted after a user is found or created
+        const { _id } = user;
+        const token = jwt.sign({ _id, email },
+            process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_TIMEOUT,
+        });
+
+        res.status(200).json({
+            message: 'success',
+            token,
+            user,
+        });
+    } catch (err) {
+        console.error("Google auth error:", err);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+};
