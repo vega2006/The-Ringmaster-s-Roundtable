@@ -12,7 +12,7 @@ const userRoutes = require("./routes/userRoutes.js");
 const compareRoutes = require("./routes/compareRoutes");
 const tabRoute=require("./routes/tabRoute.js");
 const mcpRoutes=require("./routes/mcpRoutes.js");
-
+const imageRoute=require("./routes/destinationImageRoute.js");
 database.connect();
 
 const app = express();
@@ -34,7 +34,7 @@ app.use("/api", compareRoutes);
 
 app.use("/api/mcp-server",mcpRoutes);
 app.use('/api/tabs',tabRoute);
-
+app.use("/api/images", imageRoute);
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {

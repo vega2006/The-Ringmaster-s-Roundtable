@@ -63,21 +63,22 @@ Your job:
     switch (node.name) {
       case "get_weather":
         trip.weather = state.weather;
+        trip.destination = args.city;
         break;
       case "get_route":
         trip.route = state.route;
-        if (!trip.origin) trip.origin = args.origin;
-        if (!trip.destination) trip.destination = args.destination;
+       trip.origin = args.origin;
+        trip.destination = args.destination;
         break;
       case "get_itinerary":
         trip.itinerary = state.itinerary;
-        if (!trip.startDate) trip.startDate = args.startDate;
-        if (!trip.endDate) trip.endDate = args.endDate;
+         trip.startDate = args.startDate;
+         trip.endDate = args.endDate;
         break;
       case "get_event":
         trip.events = state.events;
-        if (!trip.startDate) trip.startDate = args.startDate;
-        if (!trip.endDate) trip.endDate = args.endDate;
+         trip.startDate = args.startDate;
+        trip.endDate = args.endDate;
         break;
     }
   }
@@ -106,13 +107,18 @@ Use this data to write a clear, friendly trip summary for the user.`,
 trip.finalResponse = finalResponse;
 
 await trip.save();
-
+ let images=null;
+ if(trip.destination){
+         const res = await fetch(`http://localhost:4000/api/images/${encodeURIComponent(trip.destination)}`);
+         images=await res.json();
+ }
 
   res.json({
     message: "Trip executed successfully",
     executed: decision.tool_calls,
     trip,
     finalResponse,
+    images
   });
 }
 

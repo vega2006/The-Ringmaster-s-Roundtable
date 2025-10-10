@@ -37,7 +37,7 @@ export const TripProvider = ({ children }) => {
   const [destination, setDestination] = useState("");
   const [startTravelDate, setStartTravelDate] = useState("");
   const [endTravelDate, setEndTravelDate] = useState("");
-
+  const [images,setImages]=useState([]);
   const [activeTab, setActiveTab] = useState("Plan");
   const [manualWeather, setManualWeather] = useState(null);
   const [manualRoute, setManualRoute] = useState([]);
@@ -188,7 +188,9 @@ export const TripProvider = ({ children }) => {
         AIResult,
         setAIResult,
         tabId,
-        setTabId
+        setTabId,
+        images,
+        setImages
       }}
     >
       {children}

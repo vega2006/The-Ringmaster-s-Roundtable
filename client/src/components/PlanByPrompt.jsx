@@ -22,7 +22,8 @@ export default function PlanByPrompt() {
     setManualRoute, 
     setEvents, 
     setAIResult, 
-    tabId 
+    tabId ,
+    setImages
   } = useTrip();
 
   const userData = JSON.parse(localStorage.getItem("user-info"));
@@ -43,6 +44,8 @@ export default function PlanByPrompt() {
       });
 
       const data = await response.json();
+      console.log("data",data.images);
+      setImages(data.images);
       setOrigin(data.trip.origin);
       setDestination(data.trip.destination);
       setManualWeather(data.trip.weather);

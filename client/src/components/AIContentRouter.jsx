@@ -7,6 +7,7 @@ import BudgetContent from "./BudgetContent";
 import PromptBasedEvents from "./PromptBasedEvents";
 import AIresult from "./AIresult";
 import GoogleMapView from "./GoogleMapView";
+import TestDestinationImages from "./destinationImage";
 export default function AIContentRouter() {
   const { activeTab } = useTrip();
 
@@ -19,6 +20,7 @@ export default function AIContentRouter() {
     case "Budget": return <BudgetContent />;
     case "Events": return < PromptBasedEvents/>;
     case "Map View": return < GoogleMapView/>;
+    case "Image": return <TestDestinationImages />;
     default: return <PlanByPrompt />;
   }
 }

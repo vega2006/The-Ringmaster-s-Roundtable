@@ -5,7 +5,7 @@ import TravelContent from "./TravelContent";
 import ItineraryContent from "./ItineraryContent";
 import BudgetContent from "./BudgetContent";
 import EventsContent from "./EventsContent";
-
+import TestDestinationImages from "./destinationImage";
 export default function ContentRouter() {
   const { activeTab } = useTrip();
 
@@ -16,6 +16,7 @@ export default function ContentRouter() {
     case "Itinerary": return <ItineraryContent />;
     case "Budget": return <BudgetContent />;
     case "Events": return <EventsContent />;
+    case "Image": return <TestDestinationImages />;
     default: return <PlanInput />;
   }
 }

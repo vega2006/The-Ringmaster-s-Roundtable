@@ -1,7 +1,7 @@
 export const API_KEY = "";
 export const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
-export const TABS = ["Plan", "Itinerary","Travel", "Weather", "Events","Result","Map View"];
+export const TABS = ["Plan", "Itinerary","Travel", "Weather", "Events","Result","Map View","Image"];
 
 export const RESPONSE_SCHEMA = {
   type: "OBJECT",
