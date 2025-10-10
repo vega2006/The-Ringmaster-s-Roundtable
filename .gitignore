@@ -1,5 +1,6 @@
 # Root .gitignore
-
+#history
+.history
 # Node modules
 node_modules/
 client/node_modules/
