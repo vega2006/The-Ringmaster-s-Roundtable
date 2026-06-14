@@ -34,7 +34,6 @@ export default function PlanByPrompt() {
       alert("Please describe your trip before generating!");
       return;
     }
-
     setIsLoading(true);
     try {
       const response = await fetch("http://localhost:4000/api/mcp-server", {

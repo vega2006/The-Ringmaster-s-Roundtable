@@ -8,7 +8,7 @@ export default function TestDestinationImages() {
   const fetchImages = async () => {
     if (!destination) return;
     setLoading(true);
-
+    
     try {
       const res = await fetch(
         `http://localhost:4000/api/images/${encodeURIComponent(destination)}`
